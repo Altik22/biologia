@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="kk" class="h-full select-none">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ДНҚ мен РНҚ: Құрылымдық, генетикалық және биохимиялық ерекшеліктері</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Family -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            bio: {
+              bg: '#090d16',
+              card: '#111827',
+              cyan: '#38bdf8',
+              teal: '#2dd4bf',
+              purple: '#c084fc',
+              rose: '#fb7185',
+              gold: '#fbbf24'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #070a12;
+      color: #f3f4f6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    .slide-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .glass-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slide-view {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96) translateY(12px);
+    }
+
+    .slide-view.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+      position: relative;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col justify-between relative bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-bio-bg to-black text-slate-100">
+
+  <!-- ЖОҒАРҒЫ ПАНЕЛЬ / ІЛГЕРІЛЕУ ИНДИКАТОРЫ -->
+  <header class="h-16 px-6 border-b border-slate-800/60 flex items-center justify-between shrink-0 bg-slate-950/70 backdrop-blur-md z-30">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold shadow-lg shadow-cyan-500/10">
+        <i class="fa-solid fa-dna"></i>
+      </div>
+      <div>
+        <span class="font-extrabold text-sm text-white tracking-wide">Молекулалық<span class="text-cyan-400">Биология</span></span>
+        <span class="hidden sm:inline text-xs text-slate-400 border-l border-slate-700 ml-2 pl-2">Дипломдық жұмыс көрсетілімі</span>
+      </div>
+    </div>
+
+    <!-- Тізім мен толық экран батырмалары -->
+    <div class="flex items-center gap-2">
+      <button onclick="toggleThumbnails()" class="px-3.5 py-1.5 rounded-lg glass-pill text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-2">
+        <i class="fa-solid fa-list-ul text-cyan-400"></i>
+        <span class="hidden sm:inline">Мазмұны</span>
+      </button>
+
+      <div class="px-3.5 py-1.5 rounded-lg bg-cyan-950/50 border border-cyan-800/50 font-mono text-xs font-bold text-cyan-300">
+        <span id="current-slide-num">1</span> / <span id="total-slides-num">12</span>
+      </div>
+
+      <button onclick="toggleFullScreen()" title="Толық экран режимі" class="p-2 rounded-lg glass-pill text-xs text-slate-300 hover:text-white transition">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ЖОҒАРҒЫ ҮЗДІКСІЗ ІЛГЕРІЛЕУ СЫЗЫҒЫ -->
+  <div class="w-full h-1 bg-slate-900 shrink-0">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-400 via-teal-400 to-purple-500 transition-all duration-300" style="width: 8.33%"></div>
+  </div>
+
+  <!-- НЕГІЗГІ БӨЛІМ: БЕТШЕЛЕР (СЛАЙДТАР) -->
+  <main class="flex-1 relative overflow-hidden p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+    <div class="w-full max-w-6xl h-full flex flex-col justify-center relative">
+
+      <!-- 1-БЕТ: Бас бет -->
+      <section class="slide-view active" data-slide="1">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-cyan-400 relative overflow-hidden">
+          <div class="absolute right-0 top-0 opacity-5 p-8 pointer-events-none">
+            <i class="fa-solid fa-dna text-[260px] text-cyan-400"></i>
+          </div>
+
+          <div class="space-y-4 z-10">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              Ғылыми-зерттеу жұмысы
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
+              ДНҚ мен РНҚ: <br>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-purple-400">
+                Құрылымдық, генетикалық және биохимиялық
+              </span> ерекшеліктері
+            </h1>
+
+            <p class="text-slate-300 text-base sm:text-lg max-w-3xl leading-relaxed">
+              Репликация, транскрипция, трансляция және вирустық геномдардың репликация механизмдерін кешенді талдау.
+            </p>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 z-10">
+            <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <span class="text-xs text-slate-400 block font-semibold">Зерттеу бағыты:</span>
+              <span class="text-sm font-bold text-white">Молекулалық Биология</span>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <span class="text-xs text-slate-400 block font-semibold">Негізгі процесс:</span>
+              <span class="text-sm font-bold text-white">Матрицалық Синтез</span>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+              <span class="text-xs text-slate-400 block font-semibold">Ерекше механизмі:</span>
+              <span class="text-sm font-bold text-cyan-400">Кері Транскрипция</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2-БЕТ: Өзектілігі мен Мақсаты -->
+      <section class="slide-view" data-slide="2">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-teal-400">
+          <div class="space-y-4">
+            <div class="inline-block px-3 py-1 rounded-md bg-teal-500/10 text-teal-400 text-xs font-mono font-bold">БӨЛІМ 1 | ӨЗЕКТІЛІГІ МЕН МАҚСАТЫ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Тақырыптың Өзектілігі мен Мақсаты</h2>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Тірі ағзалардың өмір сүруі, дамуы және тұқым қуалайтын ақпаратты сақтауы тікелей нуклеин қышқылдарымен байланысты.
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 my-auto">
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-lg">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">Зерттеу Мақсаты</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                ДНҚ мен РНҚ-ның құрылымдық-функционалдық ерекшеліктерін талдау, матрицалық синтез жүйесін және вирустардың биохимиясын ғылыми түрде ашу.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-lg">
+                <i class="fa-solid fa-diagram-project"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">Орталық Догма Негізі</h3>
+              <div class="p-3 rounded-xl bg-slate-950 font-mono text-center text-xs text-cyan-300 font-bold border border-slate-800">
+                ДНҚ &rarr; РНҚ &rarr; БЕЛОК
+              </div>
+              <p class="text-xs text-slate-400">
+                Генетикалық ақпарат ағынының сақталуы мен белок түрінде жүзеге асуы.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400">
+            * Вирустар әлемінде осы орталық догманың кері бағытта жүруі (кері транскрипция) зерттеудің өзекті бағыты болып табылады.
+          </div>
+        </div>
+      </section>
+
+      <!-- 3-БЕТ: ДНҚ Химиялық Құрамы -->
+      <section class="slide-view" data-slide="3">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-cyan-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-cyan-500/10 text-cyan-400 text-xs font-mono font-bold">БӨЛІМ 1.1 | ДНҚ ҚҰРЫЛЫСЫ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">ДНҚ-ның Химиялық Құрамы мен Қос Спиралы</h2>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-4 my-auto">
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <span class="text-xs font-bold text-cyan-400 block font-mono">1. Мономер Құрамы</span>
+              <h3 class="text-base font-bold text-white">Дезоксирибонуклеотид</h3>
+              <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+                <li>Көмірсу: Дезоксирибоза ($C_5H_{10}O_4$)</li>
+                <li>Фосфор қышқылының қалдығы</li>
+                <li>Пуриндер: Аденин (A), Гуанин (G)</li>
+                <li>Пиримидиндер: Тимин (T), Цитозин (C)</li>
+              </ul>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <span class="text-xs font-bold text-teal-400 block font-mono">2. Комплементарлық</span>
+              <h3 class="text-base font-bold text-white">Байланысу Ережесі</h3>
+              <div class="font-mono text-xs text-cyan-300 font-bold space-y-2 p-3 rounded-lg bg-slate-950 border border-slate-800">
+                <div>A = T (2 сутектік байланыс)</div>
+                <div>G &equiv; C (3 сутектік байланыс)</div>
+              </div>
+              <p class="text-xs text-slate-400">Тізбектер ажырамас комплементарлы қосақталады.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <span class="text-xs font-bold text-purple-400 block font-mono">3. Тарихи Дерек</span>
+              <h3 class="text-base font-bold text-white">1953 Жылғы Төңкеріс</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Джеймс Уотсон мен Фрэнсис Крик ДНҚ-ның оңға оралған екі еселенген спираль құрылымын ашты.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-cyan-950/30 border border-cyan-800/40 text-xs text-cyan-200">
+            ДНҚ тізбектері бір-біріне қарама-қарсы бағытталған (антипараллельді 5' &rarr; 3' және 3' &rarr; 5').
+          </div>
+        </div>
+      </section>
+
+      <!-- 4-БЕТ: ДНҚ Құрылымдық Деңгейлері -->
+      <section class="slide-view" data-slide="4">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-purple-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs font-mono font-bold">БӨЛІМ 1.1 | ДЕҢГЕЙЛЕР</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">ДНҚ-ның Құрылымдық Ұйымдасу Деңгейлері</h2>
+          </div>
+
+          <div class="grid md:grid-cols-4 gap-4 my-auto">
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+              <span class="text-xs font-mono font-bold text-cyan-400">1-деңгей</span>
+              <h3 class="text-sm font-bold text-white">Биріншілік</h3>
+              <p class="text-xs text-slate-300">Фосфодиэфирлік байланыстар арқылы сызықтық полинуклеотидті тізбектің түзілуі.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+              <span class="text-xs font-mono font-bold text-teal-400">2-деңгей</span>
+              <h3 class="text-sm font-bold text-white">Екіншілік</h3>
+              <p class="text-xs text-slate-300">Екі тізбектің сутектік байланыстар арқылы оралып, қос спираль түзуі.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+              <span class="text-xs font-mono font-bold text-purple-400">3-деңгей</span>
+              <h3 class="text-sm font-bold text-white">Үшіншілік</h3>
+              <p class="text-xs text-slate-300">Суперспираль: ДНҚ-ның гистонды белоктарға оралып, нуклеосомалар түзуі.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+              <span class="text-xs font-mono font-bold text-rose-400">4-деңгей</span>
+              <h3 class="text-sm font-bold text-white">Төртіншілік</h3>
+              <p class="text-xs text-slate-300">Тығыздалған хроматин жіпшелері мен хромосомалардың қалыптасуы.</p>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400">
+            Суперспиральдану ДНҚ молекуласының жасуша ядросының шағын көлеміне тығыз орналасуын қамтамасыз етеді.
+          </div>
+        </div>
+      </section>
+
+      <!-- 5-БЕТ: ДНҚ Түрлері мен Жіктелуі -->
+      <section class="slide-view" data-slide="5">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-blue-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-mono font-bold">БӨЛІМ 1.2 | ЖІКТЕЛУІ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">ДНҚ Түрлері мен Жіктелуі</h2>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6 my-auto">
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <i class="fa-solid fa-cube text-2xl text-cyan-400"></i>
+              <h3 class="text-base font-bold text-white">Орналасуы Бойынша</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                • <b>Ядролық ДНҚ (нДНҚ):</b> Негізгі геном.<br>
+                • <b>Митохондриялық (мтДНҚ):</b> Энергетикалық органеллада.<br>
+                • <b>Хлоропласттық (хлДНҚ):</b> Өсімдіктерде.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <i class="fa-solid fa-circle-notch text-2xl text-teal-400"></i>
+              <h3 class="text-base font-bold text-white">Пішіні Бойынша</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                • <b>Сызықтық:</b> Эукариот хромосомаларында.<br>
+                • <b>Сақиналы:</b> Прокариоттарда және органеллаларда.<br>
+                • <b>Плазмидалар:</b> Бактериялардың дербес шағын ДНҚ-сы.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <i class="fa-solid fa-shapes text-2xl text-purple-400"></i>
+              <h3 class="text-base font-bold text-white">Конформациясы Бойынша</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                • <b>B-ДНҚ:</b> Стандартты оң спираль.<br>
+                • <b>A-ДНҚ:</b> Тығыздалған дегидратацияланған пішін.<br>
+                • <b>Z-ДНҚ:</b> Солға оралған зигзаг форма.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 text-center">
+            Плазмидалар гендік инженерия мен биотехнологияда негізгі векторлар ретінде қолданылады.
+          </div>
+        </div>
+      </section>
+
+      <!-- 6-БЕТ: РНҚ Құрамы мен Түрлері -->
+      <section class="slide-view" data-slide="6">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-teal-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-teal-500/10 text-teal-400 text-xs font-mono font-bold">БӨЛІМ 1.3 | РНҚ ТҮРЛЕРІ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">РНҚ Құрамы және Толық Жіктелуі</h2>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 my-auto">
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-teal-500/30 space-y-3">
+              <span class="text-xs font-bold text-teal-300 font-mono">А. Кодтаушы РНҚ-лар</span>
+              <ul class="text-xs text-slate-300 space-y-3">
+                <li>
+                  <b class="text-cyan-300 block text-sm">1. аРНҚ / мРНҚ (Матрицалық)</b>
+                  ДНҚ-дан аминқышқылдар реттілігін оқып, рибосомаға жеткізеді.
+                </li>
+                <li>
+                  <b class="text-teal-300 block text-sm">2. тРНҚ (Тасымалдаушы)</b>
+                  «Жоңышқа жапырағы» пішінді. Төменінде антикодон, жоғарысында аминқышқыл акцепторы бар.
+                </li>
+                <li>
+                  <b class="text-purple-300 block text-sm">3. рРНҚ (Рибосомалық)</b>
+                  Рибосоманың 60-70%-ын құрап, пептидтік байланысты катализдейді.
+                </li>
+              </ul>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-purple-500/30 space-y-3">
+              <span class="text-xs font-bold text-purple-300 font-mono">Ә. Кодтамайтын (Реттеуші) РНҚ-лар</span>
+              <ul class="text-xs text-slate-300 space-y-3">
+                <li>
+                  <b class="text-rose-300 block text-sm">1. шяРНҚ (snRNA)</b>
+                  Ядрода пре-мРНҚ сплайсингін (интрондарды қиып алуды) орындайды.
+                </li>
+                <li>
+                  <b class="text-gold block text-sm">2. миРНҚ (miRNA) / siRNA</b>
+                  РНҚ-интерференция механизмі арқылы гендердің экспрессиясын тежейді.
+                </li>
+                <li>
+                  <b class="text-indigo-300 block text-sm">3. lncRNA</b>
+                  Хроматин құрылымын реттеу мен эпигенетикалық бақылауға қатысатын ұзын РНҚ.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400">
+            РНҚ құрамында дезоксирибоза орнына рибоза қанты ($C_5H_{10}O_5$), ал Тиминнің орнына Урацил (U) болады.
+          </div>
+        </div>
+      </section>
+
+      <!-- 7-БЕТ: ДНҚ Репликациясы -->
+      <section class="slide-view" data-slide="7">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-cyan-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-cyan-500/10 text-cyan-400 text-xs font-mono font-bold">БӨЛІМ 2.1 | РЕПЛИКАЦИЯ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">ДНҚ Репликациясының Механизмі</h2>
+          </div>
+
+          <div class="grid md:grid-cols-12 gap-6 my-auto">
+            <div class="md:col-span-7 space-y-3">
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span class="text-cyan-400 font-bold text-xs">1. Инициация:</span>
+                <p class="text-xs text-slate-300 mt-1">Ori нүктесінде Хеликаза ДНҚ-ны тарқатады, Топоизомераза шиеленісті басады, ССП-белоктар тізбектерді ажыратып ұстайды.</p>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span class="text-teal-400 font-bold text-xs">2. Элонгация:</span>
+                <p class="text-xs text-slate-300 mt-1">ДНҚ-полимераза 5' &rarr; 3' бағытында синтездейді. Артта қалушы тізбекте Окадзаки фрагменттері қалыптасады.</p>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span class="text-purple-400 font-bold text-xs">3. Терминация:</span>
+                <p class="text-xs text-slate-300 mt-1">ДНҚ-лигаза фрагменттерді біріктіреді. Екі еселену жартылай сақталу (полуконсервативті) жолымен аяқталады.</p>
+              </div>
+            </div>
+
+            <div class="md:col-span-5 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+              <h3 class="text-sm font-bold text-cyan-300 border-b border-slate-800 pb-2">Негізгі Ферменттер:</h3>
+              <ul class="text-xs text-slate-300 space-y-2">
+                <li>• <b>Хеликаза:</b> Сутектік байланыстарды үзеді</li>
+                <li>• <b>РНҚ-праймаза:</b> Бастапқы праймерді салады</li>
+                <li>• <b>ДНҚ-полимераза:</b> Нуклеотидтерді тізбектейді</li>
+                <li>• <b>ДНҚ-лигаза:</b> Окадзаки үзінділерін жалғайды</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400">
+            Әрбір жаңа ДНҚ молекуласында бір ескі (ата-аналық) және бір жаңадан синтезделген тізбек болады.
+          </div>
+        </div>
+      </section>
+
+      <!-- 8-БЕТ: РНҚ Синтезі (Транскрипция) -->
+      <section class="slide-view" data-slide="8">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-teal-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-teal-500/10 text-teal-400 text-xs font-mono font-bold">БӨЛІМ 2.2 | ТРАНСКРИПЦИЯ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Транскрипция (РНҚ Синтезі)</h2>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6 my-auto">
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-teal-500/20 space-y-3">
+              <span class="text-xs font-bold text-teal-400 font-mono">1. Инициация</span>
+              <h3 class="text-base font-bold text-white">Промоторды Тану</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                РНҚ-полимераза ферменті ДНҚ-ның промотор бөлігіне бірігіп, тізбектерді жергілікті ажыратады.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-teal-500/20 space-y-3">
+              <span class="text-xs font-bold text-cyan-400 font-mono">2. Элонгация</span>
+              <h3 class="text-base font-bold text-white">Тізбекті Ұзарту</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Фермент ДНҚ бойымен жылжып, комплементарлық принцип ($A \rightarrow U, T \rightarrow A, G \rightarrow C, C \rightarrow G$) бойынша рибонуклеотидтерді жалғайды.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-teal-500/20 space-y-3">
+              <span class="text-xs font-bold text-purple-400 font-mono">3. Терминация</span>
+              <h3 class="text-base font-bold text-white">Синтездің Аяқталуы</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                ДНҚ-дағы терминатор сигналына жеткенде РНҚ-полимераза ажырап, дайын РНҚ молекуласы бөлінеді.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-cyan-300 text-center">
+            ДНҚ Матрицасы: 3'- T A C G C T A T C -5' &rarr; мРНҚ: 5'- A U G C G U A U G -3'
+          </div>
+        </div>
+      </section>
+
+      <!-- 9-БЕТ: Белок Биосинтезі (Трансляция) -->
+      <section class="slide-view" data-slide="9">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-purple-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs font-mono font-bold">БӨЛІМ 2.3 | ТРАНСЛЯЦИЯ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Трансляция (Белок Биосинтезі)</h2>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6 my-auto">
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-purple-500/20 space-y-3">
+              <span class="text-xs font-bold text-purple-400 font-mono">1. Инициация</span>
+              <h3 class="text-base font-bold text-white">Старт-Кодон (AUG)</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                мРНҚ рибосоманың кіші суббірлігіне бірігеді. Метионин арталған инициаторлық тРНҚ (UAC антикодоны) старт-кодонды табады.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-purple-500/20 space-y-3">
+              <span class="text-xs font-bold text-teal-400 font-mono">2. Элонгация</span>
+              <h3 class="text-base font-bold text-white">Пептидтік Байланыс</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                тРНҚ A-сайтқа аминқышқылын әкеледі. Пептидилтрансфераза байланыс түзеді, рибосома мРНҚ бойымен 1 кодонға алға жылжиды.
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-purple-500/20 space-y-3">
+              <span class="text-xs font-bold text-rose-400 font-mono">3. Терминация</span>
+              <h3 class="text-base font-bold text-white">Стоп-Кодондар</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Рибосома UAA, UAG немесе UGA стоп-кодондарына жеткенде релиз-факторлар қосылып, дайын белок тізбегі ажырайды.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 text-center">
+            Трансляция процесі генетикалық триплеттер кодын белоктың аминқышқылдар реттілігіне айналдырады.
+          </div>
+        </div>
+      </section>
+
+      <!-- 10-БЕТ: РНҚ Вирустарының Репликациясы -->
+      <section class="slide-view" data-slide="10">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-rose-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-rose-500/10 text-rose-400 text-xs font-mono font-bold">БӨЛІМ 3.1 | РНҚ ВИРУСТАРЫ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">РНҚ Вирустарының Репликация Механизмі</h2>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 my-auto">
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <span class="px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 font-mono text-xs font-bold">+ssRNA (Оң Тізбекті)</span>
+              <h3 class="text-base font-bold text-white">Тікелей мРНҚ Қызметі</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Вирустың геномдық РНҚ-сы жасушаға енгенде тікелей мРНҚ ретінде оқылады. Рибосомалар оны бірден трансляциялап, РНҚ-тәуелді РНҚ-полимеразаны (RdRp) синтездейді (Мысалы: Коронавирус, Полиомиелит).
+              </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
+              <span class="px-2.5 py-1 rounded bg-rose-950 text-rose-300 font-mono text-xs font-bold">-ssRNA (Теріс Тізбекті)</span>
+              <h3 class="text-base font-bold text-white">Ферментпен Бірге Ену</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Вирус геномы тікелей белок кодтай алмайды. Вирион өзімен бірге дайын RdRp ферментін ала келеді. Жасуша ішінде алдымен (+)-мРНҚ жасалады (Мысалы: Тұмау, Эбола, Құтыру).
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400">
+            РНҚ-тәуелді РНҚ-полимераза (RdRp) ферменті вирус геномын еселеуші негізгі биохимиялық құрал.
+          </div>
+        </div>
+      </section>
+
+      <!-- 11-БЕТ: Ретровирустар және Кері Транскрипция -->
+      <section class="slide-view" data-slide="11">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-purple-400">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs font-mono font-bold">БӨЛІМ 3.2 | РЕТРОВИРУСТАР</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Ретровирустар және Кері Транскрипция</h2>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-4 my-auto">
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-purple-500/20 space-y-2">
+              <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">1</span>
+              <h3 class="text-sm font-bold text-white">Кері Транскрипция</h3>
+              <p class="text-xs text-slate-300"><b>Кері транскриптаза (Ревертаза)</b> ферменті вирус РНҚ-сы негізінде екі тізбекті ДНҚ синтездейді ($\text{РНҚ} \rightarrow \text{ДНҚ}$).</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-purple-500/20 space-y-2">
+              <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">2</span>
+              <h3 class="text-sm font-bold text-white">Интеграция (Провирус)</h3>
+              <p class="text-xs text-slate-300"><b>Интеграза</b> ферменті түзілген вирустық ДНҚ-ны иесі жасушаның хромосомасына енгізеді (Провирус).</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900/80 border border-purple-500/20 space-y-2">
+              <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">3</span>
+              <h3 class="text-sm font-bold text-white">Жинақталу &amp; Бүршіктену</h3>
+              <p class="text-xs text-slate-300">Жасушалық РНҚ-полимераза провирустан жаңа вирус РНҚ-ларын түзеді, вириондар сыртқа тарайды.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-800/40 text-xs text-purple-200">
+            <b>АИТВ (Адамның Имунодефицит Вирусы):</b> Кері транскрипция арқылы иесі геномына мәңгілік енетін ретровирус өкілі.
+          </div>
+        </div>
+      </section>
+
+      <!-- 12-БЕТ: Қорытынды -->
+      <section class="slide-view" data-slide="12">
+        <div class="slide-card rounded-3xl p-8 sm:p-12 h-full flex flex-col justify-between border-l-4 border-gold">
+          <div class="space-y-2">
+            <div class="inline-block px-3 py-1 rounded-md bg-amber-500/10 text-amber-400 text-xs font-mono font-bold">ҚОРЫТЫНДЫ</div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Қорытынды Тұжырымдар</h2>
+          </div>
+
+          <div class="space-y-4 my-auto">
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex gap-4 items-center">
+              <i class="fa-solid fa-check-double text-cyan-400 text-xl"></i>
+              <p class="text-xs sm:text-sm text-slate-200">
+                ДНҚ генетикалық ақпараттың ұзақ мерзімді сақталуын қамтамасыз етеді, ал РНҚ түрлері оны орындауды жүзеге асырады.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex gap-4 items-center">
+              <i class="fa-solid fa-check-double text-teal-400 text-xl"></i>
+              <p class="text-xs sm:text-sm text-slate-200">
+                Репликация, транскрипция және трансляция процестері тіршіліктегі біртұтас матрицалық синтез жүйесін түзеді.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex gap-4 items-center">
+              <i class="fa-solid fa-check-double text-purple-400 text-xl"></i>
+              <p class="text-xs sm:text-sm text-slate-200">
+                Вирустардағы кері транскрипция ($\text{РНҚ} \rightarrow \text{ДНҚ}$) тірі табиғаттың молекулалық деңгейдегі икемділігін білдіреді.
+              </p>
+            </div>
+          </div>
+
+          <div class="text-center p-4 rounded-2xl bg-gradient-to-r from-cyan-950 via-slate-900 to-purple-950 border border-slate-800 text-white font-bold text-sm">
+            Назарларыңызға рақмет!
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- МАЗМҰНЫ (ТЕЗ ӨТУ) ТЕРЕЗЕСІ -->
+  <div id="thumbnails-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex-col p-6 overflow-y-auto">
+    <div class="max-w-6xl w-full mx-auto space-y-6">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-list-ul text-cyan-400"></i>
+          <span>Презентация Беттерінің Мазмұны</span>
+        </h3>
+        <button onclick="toggleThumbnails()" class="p-2 text-slate-400 hover:text-white text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="thumbnails-grid" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Тізім динамикалық түрде JavaScript арқылы толтырылады -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ТӨМЕНГІ БАСҚАРУ ПАНЕЛІ -->
+  <footer class="h-20 px-6 border-t border-slate-800/60 flex items-center justify-between shrink-0 bg-slate-950/80 backdrop-blur-md z-30">
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-white transition flex items-center gap-2">
+        <i class="fa-solid fa-chevron-left"></i>
+        <span>Алдыңғы</span>
+      </button>
+
+      <button onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition flex items-center gap-2">
+        <span>Келесі</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Төмендегі нүктелік индикаторлар -->
+    <div id="slide-dots" class="hidden md:flex items-center gap-1.5">
+      <!-- Нүктелер JS арқылы түзіледі -->
+    </div>
+
+    <div class="text-xs text-slate-400 font-mono">
+      <span class="hidden sm:inline">Басқару: </span>&larr; / &rarr; пернелері
+    </div>
+  </footer>
+
+  <!-- БЕТТЕРДІ БАСҚАРУ ЖҮЙЕСІ (JAVASCRIPT) -->
+  <script>
+    const totalSlides = 12;
+    let currentSlide = 1;
+
+    // Мазмұн тізімі
+    const slideTitles = [
+      "1. Бас Бет: ДНҚ мен РНҚ ерекшеліктері",
+      "2. Тақырыптың Өзектілігі мен Мақсаты",
+      "3. ДНҚ Химиялық Құрамы мен Спиралы",
+      "4. ДНҚ-ның Құрылымдық Деңгейлері",
+      "5. ДНҚ Түрлері мен Жіктелуі",
+      "6. РНҚ Құрамы және Толық Жіктелуі",
+      "7. ДНҚ Репликациясының Механизмі",
+      "8. Транскрипция (РНҚ Синтезі)",
+      "9. Трансляция (Белок Биосинтезі)",
+      "10. РНҚ Вирустарының Репликациясы",
+      "11. Ретровирустар & Кері Транскрипция",
+      "12. Қорытынды Тұжырымдар"
+    ];
+
+    function updateSlideView() {
+      const slides = document.querySelectorAll('.slide-view');
+      slides.forEach(slide => {
+        const num = parseInt(slide.getAttribute('data-slide'));
+        if (num === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Нөмірлерді жаңарту
+      document.getElementById('current-slide-num').innerText = currentSlide;
+      document.getElementById('total-slides-num').innerText = totalSlides;
+
+      // Ілгерілеу сызығын есептеу
+      const percent = (currentSlide / totalSlides) * 100;
+      document.getElementById('progress-bar').style.width = percent + '%';
+
+      // Нүктелерді жаңарту
+      updateDots();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideView();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideView();
+      }
+    }
+
+    function goToSlide(num) {
+      if (num >= 1 && num <= totalSlides) {
+        currentSlide = num;
+        updateSlideView();
+        closeThumbnails();
+      }
+    }
+
+    // Пернетақта батырмаларын тыңдау
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'Escape') {
+        closeThumbnails();
+      }
+    });
+
+    // Мобильді сүйреу (swipe) қолдауы
+    let touchStartX = 0;
+    let touchEndX = 0;
+    document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) nextSlide();
+      if (touchEndX - touchStartX > 50) prevSlide();
+    });
+
+    // Толық экран режимі
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Төменгі индикатор нүктелері
+    function initDots() {
+      const container = document.getElementById('slide-dots');
+      container.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = `w-2.5 h-2.5 rounded-full transition-all ${i === currentSlide ? 'bg-cyan-400 w-6' : 'bg-slate-700 hover:bg-slate-500'}`;
+        dot.onclick = () => goToSlide(i);
+        container.appendChild(dot);
+      }
+    }
+
+    function updateDots() {
+      const dots = document.getElementById('slide-dots').children;
+      for (let i = 0; i < dots.length; i++) {
+        if (i + 1 === currentSlide) {
+          dots[i].className = 'w-6 h-2.5 rounded-full bg-cyan-400 transition-all';
+        } else {
+          dots[i].className = 'w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-slate-500 transition-all';
+        }
+      }
+    }
+
+    // Мазмұны модальды терезесі
+    function toggleThumbnails() {
+      const modal = document.getElementById('thumbnails-modal');
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    }
+
+    function closeThumbnails() {
+      const modal = document.getElementById('thumbnails-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function initThumbnails() {
+      const grid = document.getElementById('thumbnails-grid');
+      grid.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const item = document.createElement('div');
+        item.className = `p-4 rounded-xl border text-left cursor-pointer transition ${i === currentSlide ? 'bg-cyan-950/80 border-cyan-400' : 'bg-slate-900 border-slate-800 hover:border-slate-700'}`;
+        item.onclick = () => goToSlide(i);
+        item.innerHTML = `
+          <span class="text-xs font-mono text-cyan-400 font-bold block mb-1">Бет ${i}</span>
+          <span class="text-xs text-white font-semibold line-clamp-2">${slideTitles[i - 1]}</span>
+        `;
+        grid.appendChild(item);
+      }
+    }
+
+    window.onload = function() {
+      initDots();
+      initThumbnails();
+      updateSlideView();
+    }
+  </script>
+</body>
+</html>
